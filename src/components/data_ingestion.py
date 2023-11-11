@@ -27,16 +27,21 @@ class DataIngestion:
             df=pd.read_csv('./notebook/data/Placement_Data_Full_Class.csv')
             logging.info('Read the dataset as dataframe')
 
+
             os.makedirs(os.path.dirname(self.ingestion_config.train_data_path),exist_ok=True)
 
             df.to_csv(self.ingestion_config.raw_data_path,index=False,header=True)
 
+            df.drop(["sl_no"], axis=1,inplace=True)
+
             logging.info("Train test split initiated")
             train_set,test_set=train_test_split(df,test_size=0.2,random_state=10)
 
-            train_set.to_csv(self.ingestion_config.train_data_path,index=False,header=True)
-
-            test_set.to_csv(self.ingestion_config.test_data_path,index=False,header=True)
+            train_set = train_set.to_csv(self.ingestion_config.train_data_path,index=False,header=True)
+   
+            test_set = test_set.to_csv(self.ingestion_config.test_data_path,index=False,header=True)
+           
+    
 
             logging.info("Inmgestion of the data iss completed")
 
@@ -52,13 +57,13 @@ class DataIngestion:
 if __name__=="__main__":
     obj=DataIngestion()
     train_data,test_data=obj.initiate_data_ingestion()    
-
-
+    
     data_transformation=DataTransformation()
     train_arr,test_arr,_=data_transformation.initiate_data_transformation(train_data,test_data)
 
-    modeltrainer=ModelTrainer()
-    print(modeltrainer.initiate_model_trainer(train_arr,test_arr))
+
+
+    # modeltrainer=ModelTrainer()
 
 
 
